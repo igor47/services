@@ -1,0 +1,19 @@
+[Unit]
+Description=igor47.dc
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+User=igor47
+WorkingDirectory=/home/igor47/repos/igor.services
+
+# Shutdown container (if running) when unit is started
+ExecStartPre=docker-compose -f docker-compose.yml down
+# Start container when unit is started
+ExecStart=docker-compose -f docker-compose.yml up
+# Stop container when unit is stopped
+ExecStop=which docker-compose -f docker-compose.yml down
+
+[Install]
+WantedBy=multi-user.target
