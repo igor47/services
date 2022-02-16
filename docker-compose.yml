@@ -13,6 +13,7 @@ services:
       - CREATE_ADMIN=1
       - ADMIN_USERNAME=igor47
       - ADMIN_PASSWORD=sunshine
+      - BASE_URL=https://igor.moomers.org/miniflux/
   postgres:
     image: postgres:latest
     ports:
