@@ -10,6 +10,9 @@ services:
     environment:
       - DATABASE_URL=postgres://miniflux:R72Zttsgd@postgres/miniflux?sslmode=disable
       - RUN_MIGRATIONS=1
+      - CREATE_ADMIN=1
+      - ADMIN_USERNAME=igor47
+      - ADMIN_PASSWORD=sunshine
   postgres:
     image: postgres:latest
     ports:

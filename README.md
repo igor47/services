@@ -33,14 +33,11 @@ $ journalctl --user -f -u igor47.dc
 
 ## minifux
 
+configuration comes from [here](https://miniflux.app/docs/installation.html#docker).
 to configure miniflux, you have to create the postgres user for it:
 
 ```bash
 $ docker-compose exec postgres /init_scripts/miniflux_db.sh
 ```
 
-you will also need to create an admin user, as detailed [here](https://miniflux.app/docs/installation.html#docker):
-
-```bash
-$ docker-compose exec miniflux /usr/bin/miniflux -create-admin
-```
+don't forget to change the default password, specified in the docker compose file.
