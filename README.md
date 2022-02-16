@@ -20,3 +20,17 @@ to view logs, use `journalctl`:
 ```bash
 $ journalctl --user -f -u igor47.dc
 ```
+
+## minifux
+
+to configure miniflux, you have to create the user for it:
+
+```bash
+$ docker-compose exec postgres /init_scripts/miniflux_db.sh
+```
+
+you will also need to create an admin user, as detailed [here](https://miniflux.app/docs/installation.html#docker):
+
+```bash
+$ docker-compose exec miniflux /usr/bin/miniflux -create-admin
+```

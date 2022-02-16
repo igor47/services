@@ -1,0 +1,25 @@
+version: '3.4'
+
+services:
+  miniflux:
+    image: miniflux/miniflux:latest
+    ports:
+      - "47081:8080"
+    depends_on:
+      - postgres
+    environment:
+      - DATABASE_URL=postgres://miniflux:R72Zttsgd@postgres/miniflux?sslmode=disable
+      - RUN_MIGRATIONS=1
+  postgres:
+    image: postgres:latest
+    ports:
+      - "47432:5432"
+    environment:
+      - POSTGRES_PASSWORD=H6FtGThfirGF9J
+    volumes:
+      - /home/igor47/services/postgres/data:/var/lib/postgresql/data
+      - /home/igor47/repos/igor.services/init_scripts:/init_scripts
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      start_period: 30s
