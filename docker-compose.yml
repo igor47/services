@@ -17,7 +17,7 @@ services:
   postgres:
     image: postgres:latest
     ports:
-      - "47432:5432"
+      - "127.0.0.1::5432"
     environment:
       - POSTGRES_PASSWORD=H6FtGThfirGF9J
     volumes:

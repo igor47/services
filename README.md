@@ -31,6 +31,20 @@ to view logs, use `journalctl`:
 $ journalctl --user -f -u igor47.dc
 ```
 
+## postgres
+
+the postgres port is available on an ephemeral port on localhost.
+to connect to the postgres from the host, you have to figure out which port it's listening on.
+run this command:
+
+```bash
+$ docker-compose port postgres 5432
+```
+
+### TODO: backups
+
+we should back up the postgres db somehow...
+
 ## minifux
 
 configuration comes from [here](https://miniflux.app/docs/installation.html#docker).
