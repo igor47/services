@@ -4,12 +4,11 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-# directory for caddy state
-mkdir -p ~igor47/services/caddy/data
-mkdir -p ~igor47/services/caddy/config
-
 # for traefik acme certs
 mkdir -p ~igor47/services/traefik/acme
+
+# nginx logs
+mkdir -p ~igor47/services/nginx/logs
 
 # make directories for host-mounted service data
 mkdir -p ~igor47/services/postgres/data
