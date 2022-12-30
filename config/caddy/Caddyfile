@@ -1,15 +1,35 @@
 {
-  auto_https off
+    auto_https off
+        servers :8080 {
+            protocols h1
+        }
 }
 
-igor.moomers.org {
-  respond "hello from moomers.org"
+http://igor.moomers.org:8080 http://igor47.moomers.org:8080 http://igor.monksofcool.org:8080 http://igor47.monksofcool.org:8080 {
+    root * /www/htdocs
+
+    route {
+        file_server /photos/*
+        file_server /pics/*
+        file_server /bm/*
+        file_server /warpzone/*
+        file_server /public/*
+        file_server /random/*
+        file_server /favicon.ico
+        file_server /.well-known
+
+        reverse_proxy http://igor47.github.io {
+            header_up Host {upstream_hostport}
+        }
+    }
 }
 
-igor47.com {
-  respond "hello from igor47.com"
+http://igor47.com:8080 {
+    redir https://www.igor47.com{uri} permanent
 }
 
-igor47.com {
-  respond "hello from www.igor47.com"
+http://www.igor47.com:8080 {
+    reverse_proxy http://igor47.github.io {
+        header_up Host {upstream_hostport}
+    }
 }
