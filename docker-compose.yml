@@ -8,7 +8,7 @@ services:
       - "service.owner=igor"
       - "traefik.http.routers.api.rule=Host(`traefik.igor.moomers.org`)"
       - "traefik.http.routers.api.service=api@internal"
-      - "traefik.http.routers.api.middlewares=auth"
+      - "traefik.http.routers.api.middlewares=basicauth"
     ports:
       - "173.236.34.123:80:80"
       - "173.236.34.123:443:443"
