@@ -8,7 +8,10 @@ services:
       - "service.owner=igor"
       - "traefik.http.routers.api.rule=Host(`traefik.igor.moomers.org`)"
       - "traefik.http.routers.api.service=api@internal"
-      - "traefik.http.routers.api.middlewares=basicauth"
+      - "traefik.http.routers.api.middlewares=basicauth@file"
+      - "traefik.http.routers.api.tls=true"
+      - "traefik.http.routers.api.tls.certresolver=le"
+      - "traefik.http.routers.api.entrypoints=https"
     ports:
       - "173.236.34.123:80:80"
       - "173.236.34.123:443:443"
@@ -16,14 +19,19 @@ services:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
       - /home/igor47/repos/igor.services/config/traefik:/etc/traefik
+      - /home/igor47/services/traefik/acme:/acme
 
   miniflux:
     image: miniflux/miniflux:latest
     labels:
       - "traefik.enable=true"
       - "service.owner=igor"
+      - "traefik.http.routers.miniflux.rule=Host(`miniflux.igor.moomers.org`)"
+      - "traefik.http.routers.miniflux.tls=true"
+      - "traefik.http.routers.miniflux.tls.certresolver=le"
+      - "traefik.http.routers.miniflux.entrypoints=https"
     ports:
-      - "127.0.0.1:47081:8080"
+      - "127.0.0.1::8080"
     depends_on:
       - postgres
     environment:
@@ -32,7 +40,7 @@ services:
       - CREATE_ADMIN=1
       - ADMIN_USERNAME=igor47
       - ADMIN_PASSWORD=sunshine
-      - BASE_URL=https://igor.moomers.org/miniflux/
+      - BASE_URL=https://miniflux.igor.moomers.org/
 
   postgres:
     image: postgres:latest

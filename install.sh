@@ -8,6 +8,9 @@ set -o pipefail
 mkdir -p ~igor47/services/caddy/logs
 mkdir -p ~igor47/services/caddy/storage
 
+# for traefik acme certs
+mkdir -p ~igor47/services/traefik/acme
+
 # make directories for host-mounted service data
 mkdir -p ~igor47/services/postgres/data
 
