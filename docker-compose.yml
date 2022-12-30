@@ -3,6 +3,7 @@ version: '3.4'
 services:
   reverseproxy:
     image: traefik:v2.9
+    restart: unless-stopped
     labels:
       - "traefik.enable=true"
       - "service.owner=igor"
@@ -23,6 +24,7 @@ services:
 
   miniflux:
     image: miniflux/miniflux:latest
+    restart: unless-stopped
     labels:
       - "traefik.enable=true"
       - "service.owner=igor"
@@ -44,6 +46,7 @@ services:
 
   postgres:
     image: postgres:latest
+    restart: unless-stopped
     labels:
       - "traefik.enable=false"
       - "service.owner=igor"
