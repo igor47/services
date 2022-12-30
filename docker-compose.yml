@@ -64,12 +64,14 @@ services:
     labels:
       - "traefik.enable=true"
       - "service.owner=igor"
-      - "traefik.http.routers.caddy.rule=Host(`igor.moomers.org`, `igor47.com`, `www.igor47.com`)"
-      - "traefik.http.routers.miniflux.tls=true"
-      - "traefik.http.routers.miniflux.tls.certresolver=le"
-      - "traefik.http.routers.miniflux.entrypoints=https"
+      - "traefik.http.routers.caddy.rule=Host(`igor.moomers.org`)"
+      - "traefik.http.routers.caddy.tls=true"
+      - "traefik.http.routers.caddy.tls.certresolver=le"
+      - "traefik.http.routers.caddy.entrypoints=https"
+      - "traefik.http.routers.igor47.rule=Host(`igor47.com`,`www.igor47.com`)"
     ports:
-      - "80:80"
+      - "127.0.0.1::80"
+      - "127.0.0.1::443"
     volumes:
       - /home/igor47/repos/igor.services/config/caddy/Caddyfile:/etc/caddy/Caddyfile
       - /home/igor47/www:/www
