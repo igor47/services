@@ -4,6 +4,8 @@
 providers:
   docker:
     defaultRule: "Host(`{{ trimPrefix `/` .Name }}.docker.localhost`)"
+    exposedByDefault: false
+    constraints: "Label(`service.owner`, `igor`)"
 
 # API and dashboard configuration
 api:
