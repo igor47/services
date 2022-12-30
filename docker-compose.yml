@@ -58,3 +58,20 @@ services:
       test: ["CMD", "pg_isready", "-U", "postgres"]
       interval: 10s
       start_period: 30s
+
+  caddy:
+    image: caddy:latest
+    labels:
+      - "traefik.enable=true"
+      - "service.owner=igor"
+      - "traefik.http.routers.caddy.rule=Host(`igor.moomers.org`, `igor47.com`, `www.igor47.com`)"
+      - "traefik.http.routers.miniflux.tls=true"
+      - "traefik.http.routers.miniflux.tls.certresolver=le"
+      - "traefik.http.routers.miniflux.entrypoints=https"
+    ports:
+      - "80:80"
+    volumes:
+      - /home/igor47/repos/igor.services/config/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - /home/igor47/www:/www
+      - /home/igor47/services/caddy/data:/data
+      - /home/igor47/services/caddy/config:/config
