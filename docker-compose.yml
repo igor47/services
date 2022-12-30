@@ -73,8 +73,8 @@ services:
       - "traefik.http.routers.caddy.tls.certresolver=le"
       - "traefik.http.routers.caddy.entrypoints=https"
       - "traefik.http.routers.igor47.rule=Host(`igor47.com`, `www.igor47.com`)"
-        #- "traefik.http.routers.igor47.tls=true"
-        #- "traefik.http.routers.igor47.tls.certresolver=le"
+      - "traefik.http.routers.igor47.tls=true"
+      - "traefik.http.routers.igor47.tls.certresolver=le"
       - "traefik.http.routers.igor47.entrypoints=https"
     ports:
       - "127.0.0.1::8080"
@@ -83,3 +83,10 @@ services:
       - /home/igor47/www:/www
       - /home/igor47/services/caddy/data:/data
       - /home/igor47/services/caddy/config:/config
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.47.0.0/16

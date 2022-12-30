@@ -35,6 +35,22 @@ certificatesResolvers:
     
 # http config
 http:
+  routers:
+    syncthing:
+      rule: "Host(`syncthing.igor.moomers.org`)"
+      service: syncthing
+      entrypoints:
+        - "https"
+      tls:
+        certresolver: le
+
+  services:
+    syncthing:
+      loadBalancer:
+        passHostHeader: false
+        servers:
+          - url: "http://172.47.0.1:4747"
+
   middlewares:
     basicauth: # the name of the auth middleware
       basicAuth:
