@@ -1,12 +1,15 @@
 {
   auto_https off
-  default_bind 127.0.0.1
-  debug
-  log {
-    format console
-  }
+}
 
-  servers :80 {
-    protocols h1
-  }
+igor.moomers.org {
+  respond "hello from moomers.org"
+}
+
+igor47.com {
+  respond "hello from igor47.com"
+}
+
+igor47.com {
+  respond "hello from www.igor47.com"
 }
