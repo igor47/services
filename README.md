@@ -17,6 +17,11 @@ $ cd ~/repos/igor.services
 $ ./install.sh
 ```
 
+## proxy
+
+this is meant to be run behind a [caddy proxy](https://caddyserver.com/).
+this should be installed on debian systems [as instructed here](https://caddyserver.com/docs/install#debian-ubuntu-raspbian).
+
 ## usage
 
 control the service with `systemctl`:

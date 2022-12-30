@@ -4,6 +4,10 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
+# directory for caddy state
+mkdir -p ~igor47/services/caddy/logs
+mkdir -p ~igor47/services/caddy/storage
+
 # make directories for host-mounted service data
 mkdir -p ~igor47/services/postgres/data
 
