@@ -2,18 +2,16 @@ version: '3.4'
 
 services:
   reverseproxy:
-    #The official v2 Traefik docker image
     image: traefik:v2.9
-    # Enables the web UI and tells Traefik to listen to docker
-    command: --api.insecure=true --providers.docker
     ports:
       # The HTTP port
       - "127.0.0.1:80:80"
-      # The Web UI (enabled by --api.insecure=true)
+      # The Web UI (enabled by api.insecure=true)
       - "127.0.0.1:8080:8080"
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
+      - /home/igor47/repos/igor.services/config/traefik:/etc/traefik
 
   miniflux:
     image: miniflux/miniflux:latest
