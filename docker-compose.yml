@@ -1,4 +1,4 @@
-version: '3.5'
+version: '3.9'
 
 networks:
   default:
@@ -6,6 +6,7 @@ networks:
     ipam:
       config:
         - subnet: 172.47.0.0/16
+
 services:
   reverseproxy:
     image: traefik:v2.9
@@ -51,7 +52,7 @@ services:
       - BASE_URL=https://miniflux.igor.moomers.org/
 
   postgres:
-    image: postgres:latest
+    image: postgres:14.6
     restart: unless-stopped
     labels:
       - "traefik.enable=false"
@@ -70,6 +71,7 @@ services:
 
   caddy:
     image: caddy:latest
+    restart: unless-stopped
     labels:
       - "traefik.enable=true"
       - "service.owner=igor"
@@ -119,6 +121,7 @@ services:
   photoprism:
     ## Use photoprism/photoprism:preview for testing preview builds:
     image: photoprism/photoprism:latest
+    restart: unless-stopped
     labels:
       - "traefik.enable=true"
       - "service.owner=igor"
@@ -128,10 +131,6 @@ services:
       - "traefik.http.routers.photos.entrypoints=https"
     depends_on:
       - mariadb
-    ## Don't enable automatic restarts until PhotoPrism has been properly configured and tested!
-    ## If the service gets stuck in a restart loop, this points to a memory, filesystem, network, or database issue:
-    ## https://docs.photoprism.app/getting-started/troubleshooting/#fatal-server-errors
-    # restart: unless-stopped
     security_opt:
       - seccomp:unconfined
       - apparmor:unconfined
@@ -222,19 +221,19 @@ services:
       MARIADB_PASSWORD: "ZRXmzoaMJuW"
       MARIADB_ROOT_PASSWORD: "JHPIILfwbVRpb9"
 
-  ## Watchtower upgrades services automatically (optional)
-  ## see https://docs.photoprism.app/getting-started/updates/#watchtower
-  ## activate via "COMPOSE_PROFILES=update docker compose up -d"
-  # watchtower:
-  #   restart: unless-stopped
-  #   image: containrrr/watchtower
-  #   labels:
-  #     - "traefik.enable=false"
-  #     - "service.owner=igor"
-  #   profiles: ["update"]
-  #   environment:
-  #     WATCHTOWER_CLEANUP: "true"
-  #     WATCHTOWER_POLL_INTERVAL: 7200 # checks for updates every two hours
-  #   volumes:
-  #     - "/var/run/docker.sock:/var/run/docker.sock"
-  #     #- "~/.docker/config.json:/config.json" # optional, for authentication if you have a Docker Hub account
+  # Watchtower upgrades services automatically (optional)
+  # see https://docs.photoprism.app/getting-started/updates/#watchtower
+  # activate via "COMPOSE_PROFILES=update docker compose up -d"
+  watchtower:
+    restart: unless-stopped
+    image: containrrr/watchtower
+    labels:
+      - "traefik.enable=false"
+      - "service.owner=igor"
+    profiles: ["update"]
+    environment:
+      WATCHTOWER_CLEANUP: "true"
+      WATCHTOWER_POLL_INTERVAL: 7200 # checks for updates every two hours
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      #- "~/.docker/config.json:/config.json" # optional, for authentication if you have a Docker Hub account
