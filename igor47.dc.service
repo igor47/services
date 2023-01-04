@@ -1,17 +1,15 @@
 [Unit]
-Description=igor47.dc
+Description=igor's docker services
+Requires=docker.service
+After=docker.service
 
 [Service]
 WorkingDirectory=/home/igor47/repos/igor.services
-Restart=always
-RestartSec=2s
-
-# Shutdown container (if running) when unit is started
-ExecStartPre=docker compose -f docker-compose.yml down
-# Start container when unit is started
-ExecStart=docker compose -f docker-compose.yml up
-# Stop container when unit is stopped
-ExecStop=which docker compose -f docker-compose.yml down
+Type=oneshot
+RemainAfterExit=true
+ExecStart=docker compose up --wait --detach --remove-orphans
+ExecReload=docker compose up --wait --detach --remove-orphans
+ExecStop=docker compose down
 
 [Install]
-WantedBy=default.target
+WantedBy=multi-user.target
