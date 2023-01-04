@@ -191,8 +191,8 @@ services:
     working_dir: "/photoprism" # do not change or remove
     ## Storage Folders: "~" is a shortcut for your home directory, "." for the current directory
     volumes:
-      - /home/igor47/services/photoprism/Pictures:/photoprism/originals"               # Original media files (DO NOT REMOVE)
-      - /home/igor47/DCIM:/photoprism/originals/DCIM"    # *Additional* media folders can be mounted like this
+      - /home/igor47/services/photoprism/Pictures:/photoprism/originals               # Original media files (DO NOT REMOVE)
+      - /home/igor47/DCIM:/photoprism/originals/DCIM    # *Additional* media folders can be mounted like this
       - /home/igor47/services/photoprism/storage:/photoprism/storage # *Writable* storage folder for cache, database, and sidecar files (DO NOT REMOVE)
       # - "~/Import:/photoprism/import"                  # *Optional* base folder from which files can be imported to originals
 
