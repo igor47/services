@@ -14,6 +14,12 @@ mkdir -p ~igor47/services/caddy/config
 # make directories for host-mounted service data
 mkdir -p ~igor47/services/postgres/data
 
+# for photoprism
+mkdir -p ~igor47/services/photoprism/storage
+
+# mariadb
+mkdir -p ~igor47/services/mariadb/mysql
+
 # install the systemd unit file
 cp ~igor47/repos/igor.services/igor47.dc.service ~/.config/systemd/user/
 systemctl --user daemon-reload

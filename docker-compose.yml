@@ -11,6 +11,7 @@ services:
   reverseproxy:
     image: traefik:v2.9
     restart: unless-stopped
+    container_name: igor.reverseproxy
     labels:
       - "traefik.enable=true"
       - "service.owner=igor"
@@ -32,6 +33,8 @@ services:
   miniflux:
     image: miniflux/miniflux:latest
     restart: unless-stopped
+    container_name: igor.miniflux
+    profiles: ["purr.moomers.org"]
     labels:
       - "traefik.enable=true"
       - "service.owner=igor"
@@ -54,6 +57,7 @@ services:
   postgres:
     image: postgres:14.6
     restart: unless-stopped
+    container_name: igor.postgres
     labels:
       - "traefik.enable=false"
       - "service.owner=igor"
@@ -73,6 +77,8 @@ services:
   caddy:
     image: caddy:latest
     restart: unless-stopped
+    container_name: igor.caddy
+    profiles: ["purr.moomers.org"]
     labels:
       - "traefik.enable=true"
       - "service.owner=igor"
@@ -123,6 +129,8 @@ services:
     ## Use photoprism/photoprism:preview for testing preview builds:
     image: photoprism/photoprism:latest
     restart: unless-stopped
+    container_name: igor.photoprism
+    profiles: ["purr.moomers.org"]
     labels:
       - "traefik.enable=true"
       - "service.owner=igor"
@@ -205,6 +213,8 @@ services:
     ## https://docs.photoprism.app/getting-started/troubleshooting/#fatal-server-errors
     restart: unless-stopped
     image: mariadb:10.10
+    container_name: igor.mariadb
+    profiles: ["purr.moomers.org"]
     labels:
       - "traefik.enable=false"
       - "service.owner=igor"
@@ -230,10 +240,11 @@ services:
   watchtower:
     restart: unless-stopped
     image: containrrr/watchtower
+    container_name: igor.watchtower
+    profiles: ["fortress", "purr.moomers.org"]
     labels:
       - "traefik.enable=false"
       - "service.owner=igor"
-    profiles: ["update"]
     environment:
       WATCHTOWER_CLEANUP: "true"
       WATCHTOWER_POLL_INTERVAL: 7200 # checks for updates every two hours

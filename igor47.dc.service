@@ -1,15 +1,16 @@
 [Unit]
 Description=igor's docker services
-Requires=docker.service
-After=docker.service
 
 [Service]
 WorkingDirectory=/home/igor47/repos/igor.services
-Type=oneshot
-RemainAfterExit=true
-ExecStart=docker compose up --wait --detach --remove-orphans
+Type=simple
+Restart=always
+RestartSec=10
+ExecStart=docker compose up --remove-orphans
 ExecReload=docker compose up --wait --detach --remove-orphans
-ExecStop=docker compose down
+ExecStop=docker compose stop
+SuccessExitStatus=130
+Environment="COMPOSE_PROFILES=%H"
 
 [Install]
 WantedBy=multi-user.target
