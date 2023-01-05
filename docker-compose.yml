@@ -8,10 +8,11 @@ networks:
         - subnet: 172.47.0.0/16
 
 services:
-  reverseproxy:
+  traefik_purr:
     image: traefik:v2.9
     restart: unless-stopped
-    container_name: igor.reverseproxy
+    container_name: traefik
+    profiles: ["purr.moomers.org"]
     labels:
       - "traefik.enable=true"
       - "service.owner=igor"
@@ -27,8 +28,8 @@ services:
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
-      - /home/igor47/repos/igor.services/config/traefik:/etc/traefik
-      - /home/igor47/services/traefik/acme:/acme
+      - ${HOME}/repos/compose.services/config/traefik:/etc/traefik
+      - ${HOME}/services/traefik/acme:/acme
 
   miniflux:
     image: miniflux/miniflux:latest
@@ -66,8 +67,8 @@ services:
     environment:
       - POSTGRES_PASSWORD=H6FtGThfirGF9J
     volumes:
-      - /home/igor47/services/postgres/data:/var/lib/postgresql/data
-      - /home/igor47/repos/igor.services/init_scripts:/init_scripts
+      - ${HOME}/services/postgres/data:/var/lib/postgresql/data
+      - ${HOME}/repos/compose.services/init_scripts:/init_scripts
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres"]
       interval: 10s
@@ -94,10 +95,10 @@ services:
     ports:
       - "127.0.0.1::8080"
     volumes:
-      - /home/igor47/repos/igor.services/config/caddy/Caddyfile:/etc/caddy/Caddyfile
-      - /home/igor47/www:/www
-      - /home/igor47/services/caddy/data:/data
-      - /home/igor47/services/caddy/config:/config
+      - ${HOME}/repos/compose.services/config/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - ${HOME}/www:/www
+      - ${HOME}/services/caddy/data:/data
+      - ${HOME}/services/caddy/config:/config
 
   # Example Docker Compose config file for PhotoPrism (Linux / AMD64)
   #
@@ -201,9 +202,9 @@ services:
     working_dir: "/photoprism" # do not change or remove
     ## Storage Folders: "~" is a shortcut for your home directory, "." for the current directory
     volumes:
-      - /home/igor47/services/photoprism/Pictures:/photoprism/originals               # Original media files (DO NOT REMOVE)
-      - /home/igor47/DCIM:/photoprism/originals/DCIM    # *Additional* media folders can be mounted like this
-      - /home/igor47/services/photoprism/storage:/photoprism/storage # *Writable* storage folder for cache, database, and sidecar files (DO NOT REMOVE)
+      - ${HOME}/services/photoprism/Pictures:/photoprism/originals               # Original media files (DO NOT REMOVE)
+      - ${HOME}/DCIM:/photoprism/originals/DCIM    # *Additional* media folders can be mounted like this
+      - ${HOME}/services/photoprism/storage:/photoprism/storage # *Writable* storage folder for cache, database, and sidecar files (DO NOT REMOVE)
       # - "~/Import:/photoprism/import"                  # *Optional* base folder from which files can be imported to originals
 
   ## Database Server (recommended)
@@ -224,7 +225,7 @@ services:
     command: mysqld --innodb-buffer-pool-size=512M --transaction-isolation=READ-COMMITTED --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --max-connections=512 --innodb-rollback-on-timeout=OFF --innodb-lock-wait-timeout=120
     ## Never store database files on an unreliable device such as a USB flash drive, an SD card, or a shared network folder:
     volumes:
-      - /home/igor47/services/mariadb/mysql:/var/lib/mysql
+      - ${HOME}/services/mariadb/mysql:/var/lib/mysql
     environment:
       MARIADB_AUTO_UPGRADE: "1"
       MARIADB_INITDB_SKIP_TZINFO: "1"

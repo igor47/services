@@ -1,39 +1,34 @@
 # services
 
-web services for igor.moomers.org
+run web services via docker-compose and traefik.
 
 ## installation
 
-this repo is meant to be cloned into `~/repos/igor.services` -- this path is hardcoded into the `install.sh` and `igor47.dc.service` files.
+this repo is meant to be cloned into `~/repos/compose.services` -- this path is hardcoded into the `install.sh` and `compose.service` files.
 
 ```bash
-$ git clone git@github.com:igor47/services.git ~/repos/igor.services
+$ git clone git@github.com:igor47/services.git ~/repos/compose.services
 ```
 
-after cloning, run `install.sh` to set up the systemd service, called `igor47.dc`.
+after cloning, run `install.sh` to set up the systemd service, called `compose`.
 
 ```bash
-$ cd ~/repos/igor.services
+$ cd ~/repos/compose.services
 $ ./install.sh
 ```
-
-## proxy
-
-this is meant to be run behind a [caddy proxy](https://caddyserver.com/).
-this should be installed on debian systems [as instructed here](https://caddyserver.com/docs/install#debian-ubuntu-raspbian).
 
 ## usage
 
 control the service with `systemctl`:
 
 ```bash
-$ systemctl --user <status|start|stop> igor47.dc
+$ systemctl --user <status|start|stop> compose
 ```
 
 to view logs, use `journalctl`:
 
 ```bash
-$ journalctl --user -f -u igor47.dc
+$ journalctl --user -f -u compose
 ```
 
 ## postgres

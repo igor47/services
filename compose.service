@@ -1,8 +1,8 @@
 [Unit]
-Description=igor's docker services
+Description=%g's docker compose services
 
 [Service]
-WorkingDirectory=/home/igor47/repos/igor.services
+WorkingDirectory=%h/repos/compose.services
 Type=simple
 Restart=always
 RestartSec=10
@@ -10,7 +10,7 @@ ExecStart=docker compose up --remove-orphans
 ExecReload=docker compose up --wait --detach --remove-orphans
 ExecStop=docker compose stop
 SuccessExitStatus=130
-Environment="COMPOSE_PROFILES=%H"
+Environment="COMPOSE_PROFILES=%H" "HOME=%h" "OWNER=%g"
 
 [Install]
 WantedBy=multi-user.target
