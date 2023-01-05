@@ -68,6 +68,7 @@ services:
       test: ["CMD", "pg_isready", "-U", "postgres"]
       interval: 10s
       start_period: 30s
+    stop_grace_period: 60s
 
   caddy:
     image: caddy:latest
@@ -220,6 +221,7 @@ services:
       MARIADB_USER: "photoprism"
       MARIADB_PASSWORD: "ZRXmzoaMJuW"
       MARIADB_ROOT_PASSWORD: "JHPIILfwbVRpb9"
+    stop_grace_period: 60s
 
   # Watchtower upgrades services automatically (optional)
   # see https://docs.photoprism.app/getting-started/updates/#watchtower
