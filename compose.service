@@ -10,7 +10,7 @@ ExecStart=docker compose up --remove-orphans
 ExecReload=docker compose up --wait --detach --remove-orphans
 ExecStop=docker compose stop
 SuccessExitStatus=130
-Environment="COMPOSE_PROFILES=%H" "HOME=%h" "OWNER=%g"
+Environment="HOME=%h" "OWNER=%g"
 
 [Install]
 WantedBy=multi-user.target

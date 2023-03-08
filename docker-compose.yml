@@ -12,7 +12,6 @@ services:
     image: traefik:v2.9
     restart: unless-stopped
     container_name: traefik
-    profiles: ["purr.moomers.org"]
     labels:
       - "traefik.enable=true"
       - "service.owner=igor"
@@ -35,7 +34,6 @@ services:
     image: miniflux/miniflux:latest
     restart: unless-stopped
     container_name: igor.miniflux
-    profiles: ["purr.moomers.org"]
     labels:
       - "traefik.enable=true"
       - "service.owner=igor"
@@ -79,7 +77,6 @@ services:
     image: caddy:latest
     restart: unless-stopped
     container_name: igor.caddy
-    profiles: ["purr.moomers.org"]
     labels:
       - "traefik.enable=true"
       - "service.owner=igor"
@@ -131,7 +128,6 @@ services:
     image: photoprism/photoprism:latest
     restart: unless-stopped
     container_name: igor.photoprism
-    profiles: ["purr.moomers.org"]
     labels:
       - "traefik.enable=true"
       - "service.owner=igor"
@@ -215,7 +211,6 @@ services:
     restart: unless-stopped
     image: mariadb:10.10
     container_name: igor.mariadb
-    profiles: ["purr.moomers.org"]
     labels:
       - "traefik.enable=false"
       - "service.owner=igor"
@@ -242,7 +237,6 @@ services:
     restart: unless-stopped
     image: containrrr/watchtower
     container_name: igor.watchtower
-    profiles: ["fortress", "purr.moomers.org"]
     labels:
       - "traefik.enable=false"
       - "service.owner=igor"
