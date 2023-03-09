@@ -23,6 +23,10 @@ entrypoints:
           scheme: https
   https:
     address: ":443"
+  syncthingtcpe:
+    address: ":22047"
+  syncthingudpe:
+    address: ":22047/udp"
 
 certificatesResolvers:
   le:
@@ -35,24 +39,8 @@ certificatesResolvers:
     
 # http config
 http:
-  routers:
-    syncthing:
-      rule: "Host(`syncthing.igor.moomers.org`)"
-      service: syncthing
-      entrypoints:
-        - "https"
-      tls:
-        certresolver: le
-
-  services:
-    syncthing:
-      loadBalancer:
-        passHostHeader: false
-        servers:
-          - url: "http://172.47.0.1:4747"
-
   middlewares:
     basicauth: # the name of the auth middleware
       basicAuth:
         users: # example: `htpasswd -nB igor`
-          - igor:$2y$05$HrM1NyKnjNAimkdQL2uvUOc1JRcSOSJr9PeA3tRXGqGtYUMGcENjO
+          - igor47:$2y$05$CcGRgq4dq8r0AIHdcYYazuuWSn01O/bg493OcdbaE2Hm45qURTzye

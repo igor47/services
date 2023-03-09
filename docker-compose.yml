@@ -24,6 +24,7 @@ services:
     ports:
       - "173.236.34.123:80:80"
       - "173.236.34.123:443:443"
+      - "173.236.34.123:22047:22047"
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
@@ -229,6 +230,47 @@ services:
       MARIADB_PASSWORD: "ZRXmzoaMJuW"
       MARIADB_ROOT_PASSWORD: "JHPIILfwbVRpb9"
     stop_grace_period: 60s
+
+  # syncthing
+  syncthing:
+    image: syncthing/syncthing
+    container_name: syncthing
+    restart: unless-stopped
+    hostname: syncthing.igor.moomers.org
+    labels:
+      - "traefik.enable=true"
+      - "service.owner=igor"
+      - "traefik.http.services.syncthing.loadbalancer.server.port=8384"
+      - "traefik.http.routers.syncthing.rule=Host(`syncthing.igor.moomers.org`)"
+      - "traefik.http.routers.syncthing.tls=true"
+      - "traefik.http.routers.syncthing.tls.certresolver=le"
+      - "traefik.http.routers.syncthing.entrypoints=https"
+      - "traefik.tcp.routers.syncthingtcpr.entrypoints=syncthingtcpe"
+      - "traefik.tcp.routers.syncthingtcpr.service=syncthingtcps"
+      - "traefik.tcp.routers.syncthingtcpr.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.syncthingtcpr.tls.passthrough=true"
+      - "traefik.tcp.services.syncthingtcps.loadbalancer.server.port=22000"
+      - "traefik.udp.routers.syncthingudpr.entrypoints=syncthingudpe"
+      - "traefik.udp.routers.syncthingudpr.service=syncthingudps"
+      - "traefik.udp.services.syncthingudps.loadbalancer.server.port=22000"
+    environment:
+      - PUID=1000
+      - PGID=113
+    volumes:
+      - ${HOME}/services/syncthing:/var/syncthing
+      # actual directories we want to sync to other machines
+      - ${HOME}/Sync:/synced/Sync
+      - ${HOME}/documents:/synced/documents
+      - ${HOME}/Downloads:/synced/Downloads
+      - /media/music:/synced/music
+      - ${HOME}/DCIM/harrie:/synced/harrie
+      - ${HOME}/DCIM/turboscan:/synced/turboscan
+      - ${HOME}/DCIM/local:/synced/local
+    ports:
+      - "127.0.0.1:8384:8384" # Web UI
+      - "22000/tcp" # TCP file transfers
+      - "22000/udp" # QUIC file transfers
+      #- "21027:21027/udp" # Receive local discovery broadcasts
 
   # Watchtower upgrades services automatically (optional)
   # see https://docs.photoprism.app/getting-started/updates/#watchtower
