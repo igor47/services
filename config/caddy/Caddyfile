@@ -18,7 +18,7 @@ http://igor.moomers.org:8080 http://igor47.moomers.org:8080 http://igor.monksofc
         file_server /favicon.ico
         file_server /.well-known
 
-        reverse_proxy http://igor47.github.io {
+        reverse_proxy blog:3000 {
             header_up Host {upstream_hostport}
         }
     }
@@ -29,7 +29,7 @@ http://igor47.com:8080 {
 }
 
 http://www.igor47.com:8080 {
-    reverse_proxy http://igor47.github.io {
+    reverse_proxy blog:3000 {
         header_up Host {upstream_hostport}
     }
 }

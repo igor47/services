@@ -272,6 +272,24 @@ services:
       - "22000/udp" # QUIC file transfers
       #- "21027:21027/udp" # Receive local discovery broadcasts
 
+  # my blog
+  blog:
+    image: ghcr.io/igor47/blog:pr-1
+    container_name: blog
+    restart: unless-stopped
+    hostname: blog.igor.moomers.org
+    labels:
+      - "traefik.enable=true"
+      - "service.owner=igor"
+      - "traefik.http.routers.blog.rule=Host(`blog.igor.moomers.org`)"
+      - "traefik.http.routers.blog.tls=true"
+      - "traefik.http.routers.blog.tls.certresolver=le"
+      - "traefik.http.routers.blog.entrypoints=https"
+    ports:
+      - "127.0.0.1:3000:3000"
+    expose:
+      - "3000"
+
   # Watchtower upgrades services automatically (optional)
   # see https://docs.photoprism.app/getting-started/updates/#watchtower
   # activate via "COMPOSE_PROFILES=update docker compose up -d"
