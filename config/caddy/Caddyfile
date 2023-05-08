@@ -15,7 +15,6 @@ http://igor.moomers.org:8080 http://igor47.moomers.org:8080 http://igor.monksofc
         file_server /warpzone/*
         file_server /public/*
         file_server /random/*
-        file_server /favicon.ico
         file_server /.well-known
 
         reverse_proxy blog:3000 {
