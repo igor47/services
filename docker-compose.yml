@@ -274,7 +274,7 @@ services:
 
   # my blog
   blog:
-    image: ghcr.io/igor47/blog:pr-1
+    image: ghcr.io/igor47/blog:latest
     container_name: blog
     restart: unless-stopped
     hostname: blog.igor.moomers.org
