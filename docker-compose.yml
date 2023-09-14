@@ -15,12 +15,12 @@ services:
       com.centurylinklabs.watchtower.scope: igor
       traefik.enable: true
       service.owner: igor
-      traefik.http.routers.api.rule: "Host(`traefik.igor.moomers.org`)"
-      traefik.http.routers.api.service: api@internal
-      traefik.http.routers.api.middlewares: basicauth@file
-      traefik.http.routers.api.tls: true
-      traefik.http.routers.api.tls.certresolver: le
-      traefik.http.routers.api.entrypoints: https
+      traefik.http.routers.traefik.rule: "Host(`traefik.igor.moomers.org`)"
+      traefik.http.routers.traefik.service: api@internal
+      traefik.http.routers.traefik.middlewares: authentik@file
+      traefik.http.routers.traefik.tls: true
+      traefik.http.routers.traefik.tls.certresolver: le
+      traefik.http.routers.traefik.entrypoints: https
     ports:
       - "173.236.34.123:80:80"
       - "173.236.34.123:443:443"

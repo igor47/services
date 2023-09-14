@@ -58,7 +58,3 @@ http:
           - X-authentik-meta-provider
           - X-authentik-meta-app
           - X-authentik-meta-version
-    basicauth: # the name of the auth middleware
-      basicAuth:
-        users: # example: `htpasswd -nB igor`
-          - igor47:$2y$05$CcGRgq4dq8r0AIHdcYYazuuWSn01O/bg493OcdbaE2Hm45qURTzye
