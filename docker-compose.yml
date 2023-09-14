@@ -13,6 +13,7 @@ services:
     restart: unless-stopped
     container_name: traefik
     labels:
+      - "com.centurylinklabs.watchtower.scope=igor"
       - "traefik.enable=true"
       - "service.owner=igor"
       - "traefik.http.routers.api.rule=Host(`traefik.igor.moomers.org`)"
@@ -36,6 +37,7 @@ services:
     restart: unless-stopped
     container_name: igor.miniflux
     labels:
+      - "com.centurylinklabs.watchtower.scope=igor"
       - "traefik.enable=true"
       - "service.owner=igor"
       - "traefik.http.routers.miniflux.rule=Host(`miniflux.igor.moomers.org`)"
@@ -59,6 +61,7 @@ services:
     restart: unless-stopped
     container_name: igor.postgres
     labels:
+      - "com.centurylinklabs.watchtower.scope=igor"
       - "traefik.enable=false"
       - "service.owner=igor"
     ports:
@@ -79,6 +82,7 @@ services:
     restart: unless-stopped
     container_name: igor.caddy
     labels:
+      - "com.centurylinklabs.watchtower.scope=igor"
       - "traefik.enable=true"
       - "service.owner=igor"
       - "traefik.http.services.caddy.loadbalancer.server.port=8080"
@@ -130,6 +134,7 @@ services:
     restart: unless-stopped
     container_name: igor.photoprism
     labels:
+      - "com.centurylinklabs.watchtower.scope=igor"
       - "traefik.enable=true"
       - "service.owner=igor"
       - "traefik.http.routers.photos.rule=Host(`photos.igor.moomers.org`)"
@@ -213,6 +218,7 @@ services:
     image: mariadb:10.10
     container_name: igor.mariadb
     labels:
+      - "com.centurylinklabs.watchtower.scope=igor"
       - "traefik.enable=false"
       - "service.owner=igor"
     security_opt: # see https://github.com/MariaDB/mariadb-docker/issues/434#issuecomment-1136151239
@@ -238,6 +244,7 @@ services:
     restart: unless-stopped
     hostname: syncthing.igor.moomers.org
     labels:
+      - "com.centurylinklabs.watchtower.scope=igor"
       - "traefik.enable=true"
       - "service.owner=igor"
       - "traefik.http.services.syncthing.loadbalancer.server.port=8384"
@@ -279,6 +286,7 @@ services:
     restart: unless-stopped
     hostname: blog.igor.moomers.org
     labels:
+      - "com.centurylinklabs.watchtower.scope=igor"
       - "traefik.enable=true"
       - "service.owner=igor"
       - "traefik.http.routers.blog.rule=Host(`blog.igor.moomers.org`)"
@@ -302,6 +310,7 @@ services:
     labels:
       traefik.enable: false
       service.owner: igor
+      com.centurylinklabs.watchtower.scope: igor
 
   # Watchtower upgrades services automatically (optional)
   # see https://docs.photoprism.app/getting-started/updates/#watchtower
@@ -311,8 +320,9 @@ services:
     image: containrrr/watchtower
     container_name: igor.watchtower
     labels:
-      - "traefik.enable=false"
-      - "service.owner=igor"
+      traefik.enable: false
+      service.owner: igor
+      com.centurylinklabs.watchtower.scope: igor
     environment:
       WATCHTOWER_CLEANUP: "true"
       WATCHTOWER_POLL_INTERVAL: 7200 # checks for updates every two hours
