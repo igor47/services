@@ -11,6 +11,7 @@ services:
   traefik.igor:
     image: traefik:v2.9
     restart: unless-stopped
+    container_name: igor.traefik
     labels:
       com.centurylinklabs.watchtower.scope: igor
       traefik.enable: true
@@ -170,7 +171,7 @@ services:
       PHOTOPRISM_UPLOAD_NSFW: "true"                 # allows uploads that MAY be offensive (no effect without TensorFlow)
       # PHOTOPRISM_DATABASE_DRIVER: "sqlite"         # SQLite is an embedded database that doesn't require a server
       PHOTOPRISM_DATABASE_DRIVER: "mysql"            # use MariaDB 10.5+ or MySQL 8+ instead of SQLite for improved performance
-      PHOTOPRISM_DATABASE_SERVER: "mariadb:3306"     # MariaDB or MySQL database server (hostname:port)
+      PHOTOPRISM_DATABASE_SERVER: "mariadb.igor:3306"     # MariaDB or MySQL database server (hostname:port)
       PHOTOPRISM_DATABASE_NAME: "photoprism"         # MariaDB or MySQL database schema name
       PHOTOPRISM_DATABASE_USER: "photoprism"         # MariaDB or MySQL database user name
       PHOTOPRISM_DATABASE_PASSWORD: "ZRXmzoaMJuW"       # MariaDB or MySQL database user password
@@ -213,8 +214,9 @@ services:
   mariadb.igor:
     ## If MariaDB gets stuck in a restart loop, this points to a memory or filesystem issue:
     ## https://docs.photoprism.app/getting-started/troubleshooting/#fatal-server-errors
-    restart: unless-stopped
     image: mariadb:10.10
+    restart: unless-stopped
+    container_name: igor.mariadb
     labels:
       com.centurylinklabs.watchtower.scope: igor
       traefik.enable: false
@@ -238,8 +240,8 @@ services:
   # syncthing
   syncthing:
     image: syncthing/syncthing
-    container_name: syncthing
     restart: unless-stopped
+    container_name: igor.syncthing
     hostname: syncthing.igor.moomers.org
     labels:
       com.centurylinklabs.watchtower.scope: igor
@@ -281,8 +283,8 @@ services:
   # my blog
   blog:
     image: ghcr.io/igor47/blog:latest
-    container_name: blog
     restart: unless-stopped
+    container_name: igor.blog
     hostname: blog.igor.moomers.org
     labels:
       com.centurylinklabs.watchtower.scope: igor
@@ -301,6 +303,7 @@ services:
   authentik.proxy:
     image: ghcr.io/goauthentik/proxy
     restart: unless-stopped
+    container_name: igor.authentik
     environment:
       AUTHENTIK_HOST: https://auth.moomers.org
       AUTHENTIK_INSECURE: "false"
@@ -316,8 +319,9 @@ services:
   # see https://docs.photoprism.app/getting-started/updates/#watchtower
   # activate via "COMPOSE_PROFILES=update docker compose up -d"
   watchtower.igor:
-    restart: unless-stopped
     image: containrrr/watchtower
+    restart: unless-stopped
+    container_name: igor.watchtower
     labels:
       traefik.enable: false
       service.owner: igor
