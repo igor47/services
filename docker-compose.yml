@@ -290,6 +290,19 @@ services:
     expose:
       - "3000"
 
+  # proxy outpost for authentik
+  authentik.proxy:
+    image: ghcr.io/goauthentik/proxy
+    restart: unless-stopped
+    environment:
+      AUTHENTIK_HOST: https://auth.moomers.org
+      AUTHENTIK_INSECURE: "false"
+    env_file:
+      ${HOME}/services/authentik/env
+    labels:
+      traefik.enable: false
+      service.owner: igor
+
   # Watchtower upgrades services automatically (optional)
   # see https://docs.photoprism.app/getting-started/updates/#watchtower
   # activate via "COMPOSE_PROFILES=update docker compose up -d"
