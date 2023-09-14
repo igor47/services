@@ -250,6 +250,7 @@ services:
       traefik.http.routers.syncthing.tls: true
       traefik.http.routers.syncthing.tls.certresolver: le
       traefik.http.routers.syncthing.entrypoints: https
+      traefik.http.routers.syncthing.middlewares: authentik@file
       traefik.tcp.routers.syncthingtcpr.entrypoints: syncthingtcpe
       traefik.tcp.routers.syncthingtcpr.service: syncthingtcps
       traefik.tcp.routers.syncthingtcpr.rule: "HostSNI(`*`)"
@@ -306,9 +307,10 @@ services:
     env_file:
       ${HOME}/services/authentik/env
     labels:
-      traefik.enable: false
       service.owner: igor
       com.centurylinklabs.watchtower.scope: igor
+      traefik.enable: true
+      traefik.http.routers.authentik.rule: "HostRegexp(`{subdomain:[a-z]+}.igor.moomers.org`) && PathPrefix(`/outpost.goauthentik.io/`)"
 
   # Watchtower upgrades services automatically (optional)
   # see https://docs.photoprism.app/getting-started/updates/#watchtower
