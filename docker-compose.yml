@@ -8,20 +8,19 @@ networks:
         - subnet: 172.47.0.0/16
 
 services:
-  traefik_purr:
+  traefik.igor:
     image: traefik:v2.9
     restart: unless-stopped
-    container_name: traefik
     labels:
-      - "com.centurylinklabs.watchtower.scope=igor"
-      - "traefik.enable=true"
-      - "service.owner=igor"
-      - "traefik.http.routers.api.rule=Host(`traefik.igor.moomers.org`)"
-      - "traefik.http.routers.api.service=api@internal"
-      - "traefik.http.routers.api.middlewares=basicauth@file"
-      - "traefik.http.routers.api.tls=true"
-      - "traefik.http.routers.api.tls.certresolver=le"
-      - "traefik.http.routers.api.entrypoints=https"
+      com.centurylinklabs.watchtower.scope: igor
+      traefik.enable: true
+      service.owner: igor
+      traefik.http.routers.api.rule: "Host(`traefik.igor.moomers.org`)"
+      traefik.http.routers.api.service: api@internal
+      traefik.http.routers.api.middlewares: basicauth@file
+      traefik.http.routers.api.tls: true
+      traefik.http.routers.api.tls.certresolver: le
+      traefik.http.routers.api.entrypoints: https
     ports:
       - "173.236.34.123:80:80"
       - "173.236.34.123:443:443"
@@ -32,22 +31,22 @@ services:
       - ${HOME}/repos/compose.services/config/traefik:/etc/traefik
       - ${HOME}/services/traefik/acme:/acme
 
-  miniflux:
+  miniflux.igor:
     image: miniflux/miniflux:latest
     restart: unless-stopped
     container_name: igor.miniflux
     labels:
-      - "com.centurylinklabs.watchtower.scope=igor"
-      - "traefik.enable=true"
-      - "service.owner=igor"
-      - "traefik.http.routers.miniflux.rule=Host(`miniflux.igor.moomers.org`)"
-      - "traefik.http.routers.miniflux.tls=true"
-      - "traefik.http.routers.miniflux.tls.certresolver=le"
-      - "traefik.http.routers.miniflux.entrypoints=https"
+      com.centurylinklabs.watchtower.scope: igor
+      traefik.enable: true
+      service.owner: igor
+      traefik.http.routers.miniflux.rule: "Host(`miniflux.igor.moomers.org`)"
+      traefik.http.routers.miniflux.tls: true
+      traefik.http.routers.miniflux.tls.certresolver: le
+      traefik.http.routers.miniflux.entrypoints: https
     ports:
       - "127.0.0.1::8080"
     depends_on:
-      - postgres
+      - postgres.igor
     environment:
       - DATABASE_URL=postgres://miniflux:R72Zttsgd@postgres/miniflux?sslmode=disable
       - RUN_MIGRATIONS=1
@@ -56,14 +55,14 @@ services:
       - ADMIN_PASSWORD=sunshine
       - BASE_URL=https://miniflux.igor.moomers.org/
 
-  postgres:
+  postgres.igor:
     image: postgres:14.6
     restart: unless-stopped
     container_name: igor.postgres
     labels:
-      - "com.centurylinklabs.watchtower.scope=igor"
-      - "traefik.enable=false"
-      - "service.owner=igor"
+      com.centurylinklabs.watchtower.scope: igor
+      traefik.enable: false
+      service.owner: igor
     ports:
       - "127.0.0.1::5432"
     environment:
@@ -82,18 +81,18 @@ services:
     restart: unless-stopped
     container_name: igor.caddy
     labels:
-      - "com.centurylinklabs.watchtower.scope=igor"
-      - "traefik.enable=true"
-      - "service.owner=igor"
-      - "traefik.http.services.caddy.loadbalancer.server.port=8080"
-      - "traefik.http.routers.caddy.rule=Host(`igor.moomers.org`,`igor47.moomers.org`,`igor.monksofcool.org`,`igor47.monksofcool.org`)"
-      - "traefik.http.routers.caddy.tls=true"
-      - "traefik.http.routers.caddy.tls.certresolver=le"
-      - "traefik.http.routers.caddy.entrypoints=https"
-      - "traefik.http.routers.igor47.rule=Host(`igor47.com`, `www.igor47.com`)"
-      - "traefik.http.routers.igor47.tls=true"
-      - "traefik.http.routers.igor47.tls.certresolver=le"
-      - "traefik.http.routers.igor47.entrypoints=https"
+      com.centurylinklabs.watchtower.scope: igor
+      traefik.enable: true
+      service.owner: igor
+      traefik.http.services.caddy.loadbalancer.server.port: 8080
+      traefik.http.routers.caddy.rule: "Host(`igor.moomers.org`,`igor47.moomers.org`,`igor.monksofcool.org`,`igor47.monksofcool.org`)"
+      traefik.http.routers.caddy.tls: true
+      traefik.http.routers.caddy.tls.certresolver: le
+      traefik.http.routers.caddy.entrypoints: https
+      traefik.http.routers.igor47.rule: "Host(`igor47.com`, `www.igor47.com`)"
+      traefik.http.routers.igor47.tls: true
+      traefik.http.routers.igor47.tls.certresolver: le
+      traefik.http.routers.igor47.entrypoints: https
     ports:
       - "127.0.0.1::8080"
     volumes:
@@ -134,15 +133,15 @@ services:
     restart: unless-stopped
     container_name: igor.photoprism
     labels:
-      - "com.centurylinklabs.watchtower.scope=igor"
-      - "traefik.enable=true"
-      - "service.owner=igor"
-      - "traefik.http.routers.photos.rule=Host(`photos.igor.moomers.org`)"
-      - "traefik.http.routers.photos.tls=true"
-      - "traefik.http.routers.photos.tls.certresolver=le"
-      - "traefik.http.routers.photos.entrypoints=https"
+      com.centurylinklabs.watchtower.scope: igor
+      traefik.enable: true
+      service.owner: igor
+      traefik.http.routers.photos.rule: "Host(`photos.igor.moomers.org`)"
+      traefik.http.routers.photos.tls: true
+      traefik.http.routers.photos.tls.certresolver: le
+      traefik.http.routers.photos.entrypoints: https
     depends_on:
-      - mariadb
+      - mariadb.igor
     security_opt:
       - seccomp:unconfined
       - apparmor:unconfined
@@ -211,16 +210,15 @@ services:
 
   ## Database Server (recommended)
   ## see https://docs.photoprism.app/getting-started/faq/#should-i-use-sqlite-mariadb-or-mysql
-  mariadb:
+  mariadb.igor:
     ## If MariaDB gets stuck in a restart loop, this points to a memory or filesystem issue:
     ## https://docs.photoprism.app/getting-started/troubleshooting/#fatal-server-errors
     restart: unless-stopped
     image: mariadb:10.10
-    container_name: igor.mariadb
     labels:
-      - "com.centurylinklabs.watchtower.scope=igor"
-      - "traefik.enable=false"
-      - "service.owner=igor"
+      com.centurylinklabs.watchtower.scope: igor
+      traefik.enable: false
+      service.owner: igor
     security_opt: # see https://github.com/MariaDB/mariadb-docker/issues/434#issuecomment-1136151239
       - seccomp:unconfined
       - apparmor:unconfined
@@ -244,22 +242,22 @@ services:
     restart: unless-stopped
     hostname: syncthing.igor.moomers.org
     labels:
-      - "com.centurylinklabs.watchtower.scope=igor"
-      - "traefik.enable=true"
-      - "service.owner=igor"
-      - "traefik.http.services.syncthing.loadbalancer.server.port=8384"
-      - "traefik.http.routers.syncthing.rule=Host(`syncthing.igor.moomers.org`)"
-      - "traefik.http.routers.syncthing.tls=true"
-      - "traefik.http.routers.syncthing.tls.certresolver=le"
-      - "traefik.http.routers.syncthing.entrypoints=https"
-      - "traefik.tcp.routers.syncthingtcpr.entrypoints=syncthingtcpe"
-      - "traefik.tcp.routers.syncthingtcpr.service=syncthingtcps"
-      - "traefik.tcp.routers.syncthingtcpr.rule=HostSNI(`*`)"
-      - "traefik.tcp.routers.syncthingtcpr.tls.passthrough=true"
-      - "traefik.tcp.services.syncthingtcps.loadbalancer.server.port=22000"
-      - "traefik.udp.routers.syncthingudpr.entrypoints=syncthingudpe"
-      - "traefik.udp.routers.syncthingudpr.service=syncthingudps"
-      - "traefik.udp.services.syncthingudps.loadbalancer.server.port=22000"
+      com.centurylinklabs.watchtower.scope: igor
+      traefik.enable: true
+      service.owner: igor
+      traefik.http.services.syncthing.loadbalancer.server.port: 8384
+      traefik.http.routers.syncthing.rule: "Host(`syncthing.igor.moomers.org`)"
+      traefik.http.routers.syncthing.tls: true
+      traefik.http.routers.syncthing.tls.certresolver: le
+      traefik.http.routers.syncthing.entrypoints: https
+      traefik.tcp.routers.syncthingtcpr.entrypoints: syncthingtcpe
+      traefik.tcp.routers.syncthingtcpr.service: syncthingtcps
+      traefik.tcp.routers.syncthingtcpr.rule: "HostSNI(`*`)"
+      traefik.tcp.routers.syncthingtcpr.tls.passthrough: true
+      traefik.tcp.services.syncthingtcps.loadbalancer.server.port: 22000
+      traefik.udp.routers.syncthingudpr.entrypoints: syncthingudpe
+      traefik.udp.routers.syncthingudpr.service: syncthingudps
+      traefik.udp.services.syncthingudps.loadbalancer.server.port: 22000
     environment:
       - PUID=1000
       - PGID=113
@@ -286,13 +284,13 @@ services:
     restart: unless-stopped
     hostname: blog.igor.moomers.org
     labels:
-      - "com.centurylinklabs.watchtower.scope=igor"
-      - "traefik.enable=true"
-      - "service.owner=igor"
-      - "traefik.http.routers.blog.rule=Host(`blog.igor.moomers.org`)"
-      - "traefik.http.routers.blog.tls=true"
-      - "traefik.http.routers.blog.tls.certresolver=le"
-      - "traefik.http.routers.blog.entrypoints=https"
+      com.centurylinklabs.watchtower.scope: igor
+      traefik.enable: true
+      service.owner: igor
+      traefik.http.routers.blog.rule: "Host(`blog.igor.moomers.org`)"
+      traefik.http.routers.blog.tls: true
+      traefik.http.routers.blog.tls.certresolver: le
+      traefik.http.routers.blog.entrypoints: https
     ports:
       - "127.0.0.1:3000:3000"
     expose:
@@ -315,10 +313,9 @@ services:
   # Watchtower upgrades services automatically (optional)
   # see https://docs.photoprism.app/getting-started/updates/#watchtower
   # activate via "COMPOSE_PROFILES=update docker compose up -d"
-  watchtower:
+  watchtower.igor:
     restart: unless-stopped
     image: containrrr/watchtower
-    container_name: igor.watchtower
     labels:
       traefik.enable: false
       service.owner: igor
