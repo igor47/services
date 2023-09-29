@@ -5,13 +5,14 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.47.0.0/16
-
+        - subnet: 172.23.1.0/24
+          ip_range: 172.23.1.0/24
+          gateway: 172.23.1.1
+ 
 services:
   traefik.igor:
     image: traefik:v2.9
     restart: unless-stopped
-    container_name: igor.traefik
     labels:
       com.centurylinklabs.watchtower.scope: igor
       traefik.enable: true
@@ -35,7 +36,6 @@ services:
   miniflux.igor:
     image: miniflux/miniflux:latest
     restart: unless-stopped
-    container_name: igor.miniflux
     labels:
       com.centurylinklabs.watchtower.scope: igor
       traefik.enable: true
@@ -49,7 +49,7 @@ services:
     depends_on:
       - postgres.igor
     environment:
-      - DATABASE_URL=postgres://miniflux:R72Zttsgd@postgres/miniflux?sslmode=disable
+      - DATABASE_URL=postgres://miniflux:R72Zttsgd@postgres.igor/miniflux?sslmode=disable
       - RUN_MIGRATIONS=1
       - CREATE_ADMIN=1
       - ADMIN_USERNAME=igor47
@@ -59,7 +59,6 @@ services:
   postgres.igor:
     image: postgres:14.6
     restart: unless-stopped
-    container_name: igor.postgres
     labels:
       com.centurylinklabs.watchtower.scope: igor
       traefik.enable: false
@@ -80,7 +79,6 @@ services:
   caddy:
     image: caddy:latest
     restart: unless-stopped
-    container_name: igor.caddy
     labels:
       com.centurylinklabs.watchtower.scope: igor
       traefik.enable: true
@@ -132,7 +130,6 @@ services:
     ## Use photoprism/photoprism:preview for testing preview builds:
     image: photoprism/photoprism:latest
     restart: unless-stopped
-    container_name: igor.photoprism
     labels:
       com.centurylinklabs.watchtower.scope: igor
       traefik.enable: true
@@ -216,7 +213,6 @@ services:
     ## https://docs.photoprism.app/getting-started/troubleshooting/#fatal-server-errors
     image: mariadb:10.10
     restart: unless-stopped
-    container_name: igor.mariadb
     labels:
       com.centurylinklabs.watchtower.scope: igor
       traefik.enable: false
@@ -238,10 +234,9 @@ services:
     stop_grace_period: 60s
 
   # syncthing
-  syncthing:
+  syncthing.igor:
     image: syncthing/syncthing
     restart: unless-stopped
-    container_name: igor.syncthing
     hostname: syncthing.igor.moomers.org
     labels:
       com.centurylinklabs.watchtower.scope: igor
@@ -281,10 +276,9 @@ services:
       #- "21027:21027/udp" # Receive local discovery broadcasts
 
   # my blog
-  blog:
+  blog.igor:
     image: ghcr.io/igor47/blog:latest
     restart: unless-stopped
-    container_name: igor.blog
     hostname: blog.igor.moomers.org
     labels:
       com.centurylinklabs.watchtower.scope: igor
@@ -300,10 +294,9 @@ services:
       - "3000"
 
   # proxy outpost for authentik
-  authentik.proxy:
+  authentik.proxy.igor:
     image: ghcr.io/goauthentik/proxy
     restart: unless-stopped
-    container_name: igor.authentik
     environment:
       AUTHENTIK_HOST: https://auth.moomers.org
       AUTHENTIK_INSECURE: "false"
@@ -321,7 +314,6 @@ services:
   watchtower.igor:
     image: containrrr/watchtower
     restart: unless-stopped
-    container_name: igor.watchtower
     labels:
       traefik.enable: false
       service.owner: igor
