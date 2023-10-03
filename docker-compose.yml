@@ -8,7 +8,9 @@ networks:
         - subnet: 172.23.1.0/24
           ip_range: 172.23.1.0/24
           gateway: 172.23.1.1
- 
+    driver_opts:
+      com.docker.network.bridge.name: "igorsrv"
+
 services:
   traefik.igor:
     image: traefik:v2.9
@@ -44,8 +46,6 @@ services:
       traefik.http.routers.miniflux.tls: true
       traefik.http.routers.miniflux.tls.certresolver: le
       traefik.http.routers.miniflux.entrypoints: https
-    ports:
-      - "127.0.0.1::8080"
     depends_on:
       - postgres.igor
     environment:
@@ -63,8 +63,6 @@ services:
       com.centurylinklabs.watchtower.scope: igor
       traefik.enable: false
       service.owner: igor
-    ports:
-      - "127.0.0.1::5432"
     environment:
       - POSTGRES_PASSWORD=H6FtGThfirGF9J
     volumes:
@@ -92,8 +90,6 @@ services:
       traefik.http.routers.igor47.tls: true
       traefik.http.routers.igor47.tls.certresolver: le
       traefik.http.routers.igor47.entrypoints: https
-    ports:
-      - "127.0.0.1::8080"
     volumes:
       - ${HOME}/repos/compose.services/config/caddy/Caddyfile:/etc/caddy/Caddyfile
       - ${HOME}/www:/www
@@ -143,8 +139,6 @@ services:
     security_opt:
       - seccomp:unconfined
       - apparmor:unconfined
-    ports:
-      - "127.0.0.1::2342" # HTTP port (host:container)
     environment:
       PHOTOPRISM_ADMIN_USER: "igor47"                 # superadmin username
       PHOTOPRISM_ADMIN_PASSWORD: "JK72Enq9hDog"          # initial superadmin password (minimum 8 characters)
@@ -269,11 +263,10 @@ services:
       - ${HOME}/DCIM/harrie:/synced/harrie
       - ${HOME}/DCIM/turboscan:/synced/turboscan
       - ${HOME}/DCIM/local:/synced/local
-    ports:
-      - "127.0.0.1:8384:8384" # Web UI
-      - "22000/tcp" # TCP file transfers
-      - "22000/udp" # QUIC file transfers
-      #- "21027:21027/udp" # Receive local discovery broadcasts
+    #ports:
+    #  - "22000/tcp" # TCP file transfers
+    #  - "22000/udp" # QUIC file transfers
+    #  - "21027:21027/udp" # Receive local discovery broadcasts
 
   # my blog
   blog.igor:
@@ -288,8 +281,6 @@ services:
       traefik.http.routers.blog.tls: true
       traefik.http.routers.blog.tls.certresolver: le
       traefik.http.routers.blog.entrypoints: https
-    ports:
-      - "127.0.0.1:3000:3000"
     expose:
       - "3000"
 
