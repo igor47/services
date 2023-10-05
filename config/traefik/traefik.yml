@@ -58,3 +58,8 @@ http:
           - X-authentik-meta-provider
           - X-authentik-meta-app
           - X-authentik-meta-version
+
+accessLog:
+  filters:
+    statusCodes:
+      - "500-599"
