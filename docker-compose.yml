@@ -298,20 +298,3 @@ services:
       com.centurylinklabs.watchtower.scope: igor
       traefik.enable: true
       traefik.http.routers.authentik.rule: "HostRegexp(`{subdomain:[a-z]+}.igor.moomers.org`) && PathPrefix(`/outpost.goauthentik.io/`)"
-
-  # Watchtower upgrades services automatically (optional)
-  # see https://docs.photoprism.app/getting-started/updates/#watchtower
-  # activate via "COMPOSE_PROFILES=update docker compose up -d"
-  watchtower.igor:
-    image: containrrr/watchtower
-    restart: unless-stopped
-    labels:
-      traefik.enable: false
-      service.owner: igor
-      com.centurylinklabs.watchtower.scope: igor
-    environment:
-      WATCHTOWER_CLEANUP: "true"
-      WATCHTOWER_POLL_INTERVAL: 7200 # checks for updates every two hours
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-      #- "~/.docker/config.json:/config.json" # optional, for authentication if you have a Docker Hub account
