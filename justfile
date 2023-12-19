@@ -68,8 +68,7 @@ mkdirs:
 
 # install the systemd service
 install: mkdirs
-  cp {{justfile_directory()}}/compose.service /etc/systemd/system/
-  cp {{justfile_directory()}}/compose.service ~/.config/systemd/user/
-  systemctl daemon-reload
-  systemctl enable compose
-  systemctl status compose
+  sed -e 's%WorkingDirectory=.*$%WorkingDirectory={{justfile_directory()}}%' {{justfile_directory()}}/compose.service > ~/.config/systemd/user/compose.service
+  systemctl --user daemon-reload
+  systemctl --user enable compose
+  systemctl --user status compose

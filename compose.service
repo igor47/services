@@ -2,7 +2,7 @@
 Description=%g's docker compose services
 
 [Service]
-WorkingDirectory=%h/repos/compose.services
+WorkingDirectory=
 Type=simple
 Restart=always
 RestartSec=10

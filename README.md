@@ -1,21 +1,16 @@
 # services
 
-run web services via docker-compose and traefik.
+run services via docker-compose and traefik.
 
 ## installation
 
-this repo is meant to be cloned into `~/repos/compose.services` -- this path is hardcoded into the `install.sh` and `compose.service` files.
+clone the repo:
 
 ```bash
-$ git clone git@github.com:igor47/services.git ~/repos/compose.services
+$ git clone git@github.com:igor47/services.git igor.services
 ```
 
-after cloning, run `install.sh` to set up the systemd service, called `compose`.
-
-```bash
-$ cd ~/repos/compose.services
-$ ./install.sh
-```
+after cloning, run `just install` to set up the systemd service, called `compose`.
 
 ## usage
 
@@ -25,20 +20,17 @@ control the service with `systemctl`:
 $ systemctl --user <status|start|stop> compose
 ```
 
-to view logs, use `journalctl`:
-
-```bash
-$ journalctl --user -f -u compose
-```
+other commands are available via `just`.
+for instance, to view logs, use `just logs`:
 
 ## postgres
 
-the postgres port is available on an ephemeral port on localhost.
-to connect to the postgres from the host, you have to figure out which port it's listening on.
-run this command:
+init is available via init scripts.
+run `just postgres-init` to create all dbs and users.
+if you want a shell in postgres:
 
 ```bash
-$ docker-compose port postgres 5432
+$ docker compose exec -it igor.postgres /bin/bash
 ```
 
 ### TODO: backups
@@ -48,10 +40,4 @@ we should back up the postgres db somehow...
 ## minifux
 
 configuration comes from [here](https://miniflux.app/docs/installation.html#docker).
-to configure miniflux, you have to create the postgres user for it:
-
-```bash
-$ docker-compose exec postgres /init_scripts/miniflux_db.sh
-```
-
-don't forget to change the default password, specified in the docker compose file.
+don't forget to change the default password.
