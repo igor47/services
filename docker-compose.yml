@@ -96,10 +96,10 @@ services:
       traefik.http.routers.igor47.tls.certresolver: le
       traefik.http.routers.igor47.entrypoints: https
     volumes:
-      - ${HOME}/repos/compose.services/config/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - ./config/caddy/Caddyfile:/etc/caddy/Caddyfile
       - ${HOME}/www:/www
-      - ${HOME}/services/caddy/data:/data
-      - ${HOME}/services/caddy/config:/config
+      - ./storage/caddy/data:/data
+      - ./storage/caddy/config:/config
 
   # Example Docker Compose config file for PhotoPrism (Linux / AMD64)
   #
@@ -199,9 +199,9 @@ services:
     working_dir: "/photoprism" # do not change or remove
     ## Storage Folders: "~" is a shortcut for your home directory, "." for the current directory
     volumes:
-      - ${HOME}/services/photoprism/Pictures:/photoprism/originals               # Original media files (DO NOT REMOVE)
+      - ./storage/photoprism/Pictures:/photoprism/originals               # Original media files (DO NOT REMOVE)
       - ${HOME}/DCIM:/photoprism/originals/DCIM    # *Additional* media folders can be mounted like this
-      - ${HOME}/services/photoprism/storage:/photoprism/storage # *Writable* storage folder for cache, database, and sidecar files (DO NOT REMOVE)
+      - ./storage/photoprism/storage:/photoprism/storage # *Writable* storage folder for cache, database, and sidecar files (DO NOT REMOVE)
       # - "~/Import:/photoprism/import"                  # *Optional* base folder from which files can be imported to originals
 
   ## Database Server (recommended)
@@ -220,7 +220,7 @@ services:
     command: mysqld --innodb-buffer-pool-size=512M --transaction-isolation=READ-COMMITTED --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --max-connections=512 --innodb-rollback-on-timeout=OFF --innodb-lock-wait-timeout=120
     ## Never store database files on an unreliable device such as a USB flash drive, an SD card, or a shared network folder:
     volumes:
-      - ${HOME}/services/mariadb/mysql:/var/lib/mysql
+      - ./storage/mariadb/mysql:/var/lib/mysql
     environment:
       MARIADB_AUTO_UPGRADE: "1"
       MARIADB_INITDB_SKIP_TZINFO: "1"
@@ -256,7 +256,7 @@ services:
       - PUID=1000
       - PGID=113
     volumes:
-      - ${HOME}/services/syncthing:/var/syncthing
+      - ./storage/syncthing:/var/syncthing
       # actual directories we want to sync to other machines
       - ${HOME}/Sync:/synced/Sync
       - ${HOME}/documents:/synced/documents
@@ -293,7 +293,7 @@ services:
       AUTHENTIK_HOST: https://auth.moomers.org
       AUTHENTIK_INSECURE: "false"
     env_file:
-      ${HOME}/services/authentik/env
+      ./storage/authentik/env
     labels:
       service.owner: igor
       traefik.enable: true
