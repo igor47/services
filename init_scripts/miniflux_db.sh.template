@@ -1,0 +1,15 @@
+#!/bin/bash
+set -e
+
+psql="psql -v ON_ERROR_STOP=1 --username $DCSM{POSTGRES_USER} --dbname postgres"
+
+# we might need to create role and DB
+exists=`$psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='$DCSM{MINIFLUX_PG_USER}'"`
+if [ "$exists" != "1" ]; then
+  $psql -tAc "CREATE ROLE $DCSM{MINIFLUX_PG_USER} WITH LOGIN;"
+  $psql -tAc "CREATE DATABASE $DCSM{MINIFLUX_PG_DB} WITH OWNER $DCSM{MINIFLUX_PG_USER};"
+  $psql -tAc "GRANT ALL PRIVILEGES ON DATABASE $DCSM{MINIFLUX_PG_DB} TO $DCSM{MINIFLUX_PG_USER};"
+fi
+
+# support password changes
+$psql -tac "ALTER USER $DCSM{MINIFLUX_PG_USER} WITH PASSWORD '$DCSM{MINIFLUX_PG_PASS}';"

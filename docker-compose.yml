@@ -12,11 +12,23 @@ networks:
       com.docker.network.bridge.name: "igorsrv"
 
 services:
+  dcsm.igor:
+    image: ghcr.io/igor47/dcsm:v0.3.0
+    environment:
+      - DCSM_KEYFILE=/secrets/key.private
+      - DCSM_SECRETS_FILE=/secrets/secrets.encrypted
+      - DCSM_SOURCE_FILE=/secrets/secrets.yaml
+      - DCSM_TEMPLATE_DIR=/config
+      - DCSM_TEMPLATE_DIR2=/init_scripts
+    volumes:
+      - ./secrets:/secrets
+      - ./config:/config
+      - ./init_scripts:/init_scripts
+
   traefik.igor:
     image: traefik:v2.9
     restart: unless-stopped
     labels:
-      com.centurylinklabs.watchtower.scope: igor
       traefik.enable: true
       service.owner: igor
       traefik.http.routers.traefik.rule: "Host(`traefik.igor.moomers.org`)"
@@ -32,14 +44,13 @@ services:
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
-      - ${HOME}/repos/compose.services/config/traefik:/etc/traefik
-      - ${HOME}/services/traefik/acme:/acme
+      - ./config/traefik:/etc/traefik
+      - ./storage/traefik/acme:/acme
 
   miniflux.igor:
     image: miniflux/miniflux:latest
     restart: unless-stopped
     labels:
-      com.centurylinklabs.watchtower.scope: igor
       traefik.enable: true
       service.owner: igor
       traefik.http.routers.miniflux.rule: "Host(`miniflux.igor.moomers.org`)"
@@ -47,27 +58,22 @@ services:
       traefik.http.routers.miniflux.tls.certresolver: le
       traefik.http.routers.miniflux.entrypoints: https
     depends_on:
-      - postgres.igor
-    environment:
-      - DATABASE_URL=postgres://miniflux:R72Zttsgd@postgres.igor/miniflux?sslmode=disable
-      - RUN_MIGRATIONS=1
-      - CREATE_ADMIN=1
-      - ADMIN_USERNAME=igor47
-      - ADMIN_PASSWORD=sunshine
-      - BASE_URL=https://miniflux.igor.moomers.org/
+      dcsm.igor:
+        condition: service_completed_successfully
+      postgres.igor:
+        condition: service_healthy
+    env_file:
+      - ./config/miniflux/config.env
 
   postgres.igor:
     image: postgres:14.6
     restart: unless-stopped
     labels:
-      com.centurylinklabs.watchtower.scope: igor
       traefik.enable: false
       service.owner: igor
-    environment:
-      - POSTGRES_PASSWORD=H6FtGThfirGF9J
     volumes:
-      - ${HOME}/services/postgres/data:/var/lib/postgresql/data
-      - ${HOME}/repos/compose.services/init_scripts:/init_scripts
+      - ./storage/postgres/data:/var/lib/postgresql/data
+      - ./init_scripts:/init_scripts
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres"]
       interval: 10s
@@ -78,7 +84,6 @@ services:
     image: caddy:latest
     restart: unless-stopped
     labels:
-      com.centurylinklabs.watchtower.scope: igor
       traefik.enable: true
       service.owner: igor
       traefik.http.services.caddy.loadbalancer.server.port: 8080
@@ -127,7 +132,6 @@ services:
     image: photoprism/photoprism:latest
     restart: unless-stopped
     labels:
-      com.centurylinklabs.watchtower.scope: igor
       traefik.enable: true
       service.owner: igor
       traefik.http.routers.photos.rule: "Host(`photos.igor.moomers.org`)"
@@ -208,7 +212,6 @@ services:
     image: mariadb:10.10
     restart: unless-stopped
     labels:
-      com.centurylinklabs.watchtower.scope: igor
       traefik.enable: false
       service.owner: igor
     security_opt: # see https://github.com/MariaDB/mariadb-docker/issues/434#issuecomment-1136151239
@@ -233,7 +236,6 @@ services:
     restart: unless-stopped
     hostname: syncthing.igor.moomers.org
     labels:
-      com.centurylinklabs.watchtower.scope: igor
       traefik.enable: true
       service.owner: igor
       traefik.http.services.syncthing.loadbalancer.server.port: 8384
@@ -274,7 +276,6 @@ services:
     restart: unless-stopped
     hostname: blog.igor.moomers.org
     labels:
-      com.centurylinklabs.watchtower.scope: igor
       traefik.enable: true
       service.owner: igor
       traefik.http.routers.blog.rule: "Host(`blog.igor.moomers.org`)"
@@ -295,6 +296,5 @@ services:
       ${HOME}/services/authentik/env
     labels:
       service.owner: igor
-      com.centurylinklabs.watchtower.scope: igor
       traefik.enable: true
       traefik.http.routers.authentik.rule: "HostRegexp(`{subdomain:[a-z]+}.igor.moomers.org`) && PathPrefix(`/outpost.goauthentik.io/`)"

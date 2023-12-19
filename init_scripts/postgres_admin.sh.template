@@ -1,0 +1,7 @@
+#!/bin/bash
+set -e
+
+psql="psql -v ON_ERROR_STOP=1 --username $DCSM{POSTGRES_USER} --dbname postgres"
+
+# support password changes
+$psql -tac "ALTER USER $DCSM{POSTGRES_USER} WITH PASSWORD '$DCSM{POSTGRES_PASSWORD}';"
