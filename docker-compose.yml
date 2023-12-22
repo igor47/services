@@ -262,7 +262,7 @@ services:
       - ${HOME}/documents:/synced/documents
       - ${HOME}/Downloads:/synced/Downloads
       - /media/music:/synced/music
-      - ${HOME}/DCIM/harrie:/synced/harrie
+      - ${HOME}/DCIM/chirper:/synced/chirper
       - ${HOME}/DCIM/turboscan:/synced/turboscan
       - ${HOME}/DCIM/local:/synced/local
     #ports:
