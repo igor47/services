@@ -182,7 +182,7 @@ services:
         soft: 262144
         hard: 262144
 
-  plausible:
+  plausible.igor:
     image: plausible/analytics:v2.0
     restart: always
     command: sh -c "sleep 10 && /entrypoint.sh db createdb && /entrypoint.sh db migrate && /entrypoint.sh run"
