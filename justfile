@@ -33,6 +33,7 @@ logs service="":
 postgres-init: dcsm
   docker compose exec -it postgres.igor /init_scripts/postgres_admin.sh
   docker compose exec -it postgres.igor /init_scripts/miniflux_db.sh
+  docker compose exec -it postgres.igor /init_scripts/plausible_db.sh
 
 # make the directory structure for the storage volumes
 mkdirs:
