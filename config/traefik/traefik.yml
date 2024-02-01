@@ -39,6 +39,20 @@ certificatesResolvers:
     
 # http config
 http:
+  routers:
+    tunnel:
+      rule: "Host(`tunnel.igor.moomers.org`)"
+      service: "tunnel"
+      entryPoints: ["https"]
+      tls:
+        certResolver: le
+
+  services:
+    tunnel:
+      loadBalancer:
+        servers:
+          - url: "http://172.23.1.1:8047"  # Assuming the service is HTTP
+
   middlewares:
     # this is based on:
     # https://github.com/brokenscripts/authentik_traefik
