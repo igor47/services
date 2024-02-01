@@ -42,3 +42,8 @@ http://www.igor47.com:8080 {
         header_up Host {upstream_hostport}
     }
 }
+
+http://boat.moomers.org:8080 {
+    root * /www/boatsite
+    file_server
+}

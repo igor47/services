@@ -95,9 +95,14 @@ services:
       traefik.http.routers.igor47.tls: true
       traefik.http.routers.igor47.tls.certresolver: le
       traefik.http.routers.igor47.entrypoints: https
+      traefik.http.routers.boat.rule: "Host(`boat.moomers.org`)"
+      traefik.http.routers.boat.tls: true
+      traefik.http.routers.boat.tls.certresolver: le
+      traefik.http.routers.boat.entrypoints: https
     volumes:
       - ./config/caddy/Caddyfile:/etc/caddy/Caddyfile
       - ${HOME}/www:/www
+      - ${HOME}/repos/boatsite:/www/boatsite
       - ./storage/caddy/data:/data
       - ./storage/caddy/config:/config
 
