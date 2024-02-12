@@ -44,6 +44,16 @@ http://www.igor47.com:8080 {
 }
 
 http://boat.moomers.org:8080 {
-    root * /www/boatsite
+    root * /sites/boatsite
+    file_server
+}
+
+http://mouseoversandwich.com:8080 http://mouseoversandwich.moomers.org:8080 http://www.mouseoversandwich.com:8080 http://nom.mouseoversandwich.com:8080 http://nom.nom.mouseoversandwich.com:8080 http://nom.nom.nom.mouseoversandwich.com:8080 {
+    root * /sites/mouseoversandwich
+    file_server
+}
+
+http://hobbitfacts.net:8080 http://www.hobbitfacts.net:8080 http://hobbitfacts.com:8080 http://www.hobbitfacts.com:8080 {
+    root * /sites/hobbitfacts
     file_server
 }

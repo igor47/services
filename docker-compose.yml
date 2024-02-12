@@ -95,14 +95,27 @@ services:
       traefik.http.routers.igor47.tls: true
       traefik.http.routers.igor47.tls.certresolver: le
       traefik.http.routers.igor47.entrypoints: https
+      # boat
       traefik.http.routers.boat.rule: "Host(`boat.moomers.org`)"
       traefik.http.routers.boat.tls: true
       traefik.http.routers.boat.tls.certresolver: le
       traefik.http.routers.boat.entrypoints: https
+      # hobbitfacts
+      traefik.http.routers.hobbitfacts.rule: "Host(`www.hobbitfacts.net`,`hobbitfacts.com`,`hobbitfacts.net`,`www.hobbitfacts.com`)"
+      traefik.http.routers.hobbitfacts.tls: true
+      traefik.http.routers.hobbitfacts.tls.certresolver: le
+      traefik.http.routers.hobbitfacts.entrypoints: https
+      # mouseover
+      traefik.http.routers.mouseover.rule: "Host(`mouseoversandwich.com`,`mouseoversandwich.moomers.org`,`www.mouseoversandwich.com`,`nom.mouseoversandwich.com`,`nom.nom.mouseoversandwich.com`,`nom.nom.nom.mouseoversandwich.com`)"
+      traefik.http.routers.mouseover.tls: true
+      traefik.http.routers.mouseover.tls.certresolver: le
+      traefik.http.routers.mouseover.entrypoints: https
     volumes:
       - ./config/caddy/Caddyfile:/etc/caddy/Caddyfile
       - ${HOME}/www:/www
-      - ${HOME}/repos/boatsite:/www/boatsite
+      - ${HOME}/repos/mouseoversandwich:/sites/mouseoversandwich
+      - ${HOME}/repos/hobbitfacts:/sites/hobbitfacts
+      - ${HOME}/repos/boatsite:/sites/boatsite
       - ./storage/caddy/data:/data
       - ./storage/caddy/config:/config
 
