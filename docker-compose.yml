@@ -187,36 +187,3 @@ services:
       service.owner: igor
       traefik.enable: true
       traefik.http.routers.authentik.rule: "HostRegexp(`{subdomain:[a-z]+}.igor.moomers.org`) && PathPrefix(`/outpost.goauthentik.io/`)"
-
-  plausible.events.igor:
-    image: clickhouse/clickhouse-server:23.3.7.5-alpine
-    restart: always
-    volumes:
-      - ./storage/plausble/events_db:/var/lib/clickhouse
-      - ./config/plausible/clickhouse-config.xml:/etc/clickhouse-server/config.d/logging.xml:ro
-      - ./config/plausible/clickhouse-user-config.xml:/etc/clickhouse-server/users.d/logging.xml:ro
-    ulimits:
-      nofile:
-        soft: 262144
-        hard: 262144
-
-  plausible.igor:
-    image: plausible/analytics:v2.0
-    restart: always
-    command: sh -c "sleep 10 && /entrypoint.sh db createdb && /entrypoint.sh db migrate && /entrypoint.sh run"
-    depends_on:
-      dcsm.igor:
-        condition: service_completed_successfully
-      postgres.igor:
-        condition: service_healthy
-      plausible.events.igor:
-        condition: service_started
-    env_file:
-      - ./config/plausible/conf.env
-    labels:
-      traefik.enable: true
-      service.owner: igor
-      traefik.http.routers.plausible.rule: "Host(`analytics.igor.moomers.org`)"
-      traefik.http.routers.plausible.tls: true
-      traefik.http.routers.plausible.tls.certresolver: le
-      traefik.http.routers.plausible.entrypoints: https
