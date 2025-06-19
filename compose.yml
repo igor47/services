@@ -147,6 +147,7 @@ services:
       # actual directories we want to sync to other machines
       - ${HOME}/Sync:/synced/Sync
       - ${HOME}/documents:/synced/documents
+      - ${HOME}/phonebackup:/synced/phonebackup
       - ${HOME}/Downloads:/synced/Downloads
       - /media/music:/synced/music
       - ${HOME}/DCIM/chirper:/synced/chirper
