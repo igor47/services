@@ -175,7 +175,7 @@ services:
 
   # proxy outpost for authentik
   authentik.proxy.igor:
-    image: ghcr.io/goauthentik/proxy:2025.2.4
+    image: ghcr.io/goauthentik/proxy:2025.10.3
     restart: unless-stopped
     environment:
       AUTHENTIK_HOST: https://auth.moomers.org
