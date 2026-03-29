@@ -66,6 +66,8 @@ mkdirs:
   mkdir -p {{STORAGE}}/services/photoprism/storage
   # mariadb
   mkdir -p {{STORAGE}}/services/mariadb/mysql
+  # dogfood
+  mkdir -p {{STORAGE}}/dogfood/data
 
 # install the systemd service
 install: mkdirs

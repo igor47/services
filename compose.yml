@@ -173,6 +173,29 @@ services:
     expose:
       - "3000"
 
+  # dogfood -- dog digestive health tracker with MCP
+  # https://github.com/igor47/dogfood
+  dogfood.igor:
+    image: ghcr.io/igor47/dogfood:0.1.2
+    restart: unless-stopped
+    depends_on:
+      dcsm.igor:
+        condition: service_completed_successfully
+    environment:
+      - DISPLAY_TZ=America/Los_Angeles
+    env_file:
+      - ./config/dogfood/creds.env
+    volumes:
+      - ./storage/dogfood/data:/app/data
+    labels:
+      traefik.enable: true
+      service.owner: igor
+      traefik.http.routers.dogfood.rule: "Host(`dogfood.igor.moomers.org`)"
+      traefik.http.routers.dogfood.tls: true
+      traefik.http.routers.dogfood.tls.certresolver: le
+      traefik.http.routers.dogfood.entrypoints: https
+      traefik.http.services.dogfood.loadbalancer.server.port: 3000
+
   # proxy outpost for authentik
   authentik.proxy.igor:
     image: ghcr.io/goauthentik/proxy:2026.2.1
