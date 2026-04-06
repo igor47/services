@@ -176,13 +176,14 @@ services:
   # dogfood -- dog digestive health tracker with MCP
   # https://github.com/igor47/dogfood
   dogfood.igor:
-    image: ghcr.io/igor47/dogfood:0.1.6
+    image: ghcr.io/igor47/dogfood:0.1.7
     restart: unless-stopped
     depends_on:
       dcsm.igor:
         condition: service_completed_successfully
     environment:
       - DISPLAY_TZ=America/Los_Angeles
+      - PUBLIC_URL=https://dogfood.igor.moomers.org
     env_file:
       - ./config/dogfood/creds.env
     volumes:
