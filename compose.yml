@@ -24,7 +24,7 @@ services:
       - ./init_scripts:/init_scripts
 
   traefik.igor:
-    image: traefik:v2.9
+    image: traefik:v3.4
     restart: unless-stopped
     labels:
       traefik.enable: true
@@ -85,11 +85,11 @@ services:
       traefik.enable: true
       service.owner: igor
       traefik.http.services.caddy.loadbalancer.server.port: 8080
-      traefik.http.routers.caddy.rule: "Host(`igor.moomers.org`,`igor47.moomers.org`,`igor.monksofcool.org`,`igor47.monksofcool.org`)"
+      traefik.http.routers.caddy.rule: "Host(`igor.moomers.org`) || Host(`igor47.moomers.org`) || Host(`igor.monksofcool.org`) || Host(`igor47.monksofcool.org`)"
       traefik.http.routers.caddy.tls: true
       traefik.http.routers.caddy.tls.certresolver: le
       traefik.http.routers.caddy.entrypoints: https
-      traefik.http.routers.igor47.rule: "Host(`igor47.com`, `www.igor47.com`)"
+      traefik.http.routers.igor47.rule: "Host(`igor47.com`) || Host(`www.igor47.com`)"
       traefik.http.routers.igor47.tls: true
       traefik.http.routers.igor47.tls.certresolver: le
       traefik.http.routers.igor47.entrypoints: https
@@ -99,12 +99,12 @@ services:
       traefik.http.routers.boat.tls.certresolver: le
       traefik.http.routers.boat.entrypoints: https
       # hobbitfacts
-      traefik.http.routers.hobbitfacts.rule: "Host(`www.hobbitfacts.net`,`hobbitfacts.com`,`hobbitfacts.net`,`www.hobbitfacts.com`)"
+      traefik.http.routers.hobbitfacts.rule: "Host(`www.hobbitfacts.net`) || Host(`hobbitfacts.com`) || Host(`hobbitfacts.net`) || Host(`www.hobbitfacts.com`)"
       traefik.http.routers.hobbitfacts.tls: true
       traefik.http.routers.hobbitfacts.tls.certresolver: le
       traefik.http.routers.hobbitfacts.entrypoints: https
       # mouseover
-      traefik.http.routers.mouseover.rule: "Host(`mouseoversandwich.com`,`mouseoversandwich.moomers.org`,`www.mouseoversandwich.com`,`nom.mouseoversandwich.com`,`nom.nom.mouseoversandwich.com`,`nom.nom.nom.mouseoversandwich.com`)"
+      traefik.http.routers.mouseover.rule: "Host(`mouseoversandwich.com`) || Host(`mouseoversandwich.moomers.org`) || Host(`www.mouseoversandwich.com`) || Host(`nom.mouseoversandwich.com`) || Host(`nom.nom.mouseoversandwich.com`) || Host(`nom.nom.nom.mouseoversandwich.com`)"
       traefik.http.routers.mouseover.tls: true
       traefik.http.routers.mouseover.tls.certresolver: le
       traefik.http.routers.mouseover.entrypoints: https
@@ -209,4 +209,4 @@ services:
     labels:
       service.owner: igor
       traefik.enable: true
-      traefik.http.routers.authentik.rule: "HostRegexp(`{subdomain:[a-z]+}.igor.moomers.org`) && PathPrefix(`/outpost.goauthentik.io/`)"
+      traefik.http.routers.authentik.rule: "HostRegexp(`[a-z]+\\.igor\\.moomers\\.org`) && PathPrefix(`/outpost.goauthentik.io/`)"
