@@ -24,7 +24,7 @@ services:
       - ./init_scripts:/init_scripts
 
   traefik.igor:
-    image: traefik:v3.4
+    image: traefik:v3.6
     restart: unless-stopped
     labels:
       traefik.enable: true
